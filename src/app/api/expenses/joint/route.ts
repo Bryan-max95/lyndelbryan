@@ -1,21 +1,87 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {
+/**
+ * ✅ Next.js 15+
+ * params ahora es Promise
+ */
+type Params = Promise<{ id: string }>;
+
+/* =====================================================
+   GET - Obtener gasto conjunto por ID
+===================================================== */
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Params }
+) {
   try {
-    // TODO: Get joint expenses from database
-    const expenses: any[] = [];
-    return NextResponse.json(expenses);
+    const { id } = await params;
+
+    // TODO: Obtener gasto desde base de datos
+    return NextResponse.json({
+      id,
+      message: 'Joint expense fetched successfully'
+    });
+
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch joint expenses' }, { status: 400 });
+    console.error('GET joint expense error:', error);
+
+    return NextResponse.json(
+      { error: 'Failed to fetch joint expense' },
+      { status: 400 }
+    );
   }
 }
 
-export async function POST(request: NextRequest) {
+/* =====================================================
+   PUT - Actualizar gasto conjunto
+===================================================== */
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Params }
+) {
   try {
+    const { id } = await params;
     const data = await request.json();
-    // TODO: Create joint expense in database
-    return NextResponse.json({ id: '1', ...data });
+
+    // TODO: Actualizar gasto en base de datos
+    return NextResponse.json({
+      id,
+      ...data,
+      message: 'Joint expense updated successfully'
+    });
+
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create joint expense' }, { status: 400 });
+    console.error('PUT joint expense error:', error);
+
+    return NextResponse.json(
+      { error: 'Failed to update joint expense' },
+      { status: 400 }
+    );
+  }
+}
+
+/* =====================================================
+   DELETE - Eliminar gasto conjunto
+===================================================== */
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Params }
+) {
+  try {
+    const { id } = await params;
+
+    // TODO: Eliminar gasto en base de datos
+    return NextResponse.json({
+      id,
+      message: 'Joint expense deleted successfully'
+    });
+
+  } catch (error) {
+    console.error('DELETE joint expense error:', error);
+
+    return NextResponse.json(
+      { error: 'Failed to delete joint expense' },
+      { status: 400 }
+    );
   }
 }
