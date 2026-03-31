@@ -1,23 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * ✅ Next.js 15+
+ * ✅ Next.js 15 / 16 Route Context
  * params ahora es Promise
  */
-type Params = Promise<{ id: string }>;
+type RouteContext = {
+  params: Promise<{ id: string }>;
+};
 
-/* =====================================================
-   GET - Obtener gasto conjunto por ID
-===================================================== */
+/* ======================================================
+   GET - Obtener gasto conjunto
+====================================================== */
 export async function GET(
   request: NextRequest,
-  { params }: { params: Params }
+  context: RouteContext
 ) {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
 
-    // TODO: Obtener gasto desde base de datos
+    // 🔹 TODO: Obtener desde DB
     return NextResponse.json({
+      success: true,
       id,
       message: 'Joint expense fetched successfully'
     });
@@ -26,25 +29,26 @@ export async function GET(
     console.error('GET joint expense error:', error);
 
     return NextResponse.json(
-      { error: 'Failed to fetch joint expense' },
+      { success: false, error: 'Failed to fetch joint expense' },
       { status: 400 }
     );
   }
 }
 
-/* =====================================================
+/* ======================================================
    PUT - Actualizar gasto conjunto
-===================================================== */
+====================================================== */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Params }
+  context: RouteContext
 ) {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
     const data = await request.json();
 
-    // TODO: Actualizar gasto en base de datos
+    // 🔹 TODO: Update DB
     return NextResponse.json({
+      success: true,
       id,
       ...data,
       message: 'Joint expense updated successfully'
@@ -54,24 +58,25 @@ export async function PUT(
     console.error('PUT joint expense error:', error);
 
     return NextResponse.json(
-      { error: 'Failed to update joint expense' },
+      { success: false, error: 'Failed to update joint expense' },
       { status: 400 }
     );
   }
 }
 
-/* =====================================================
+/* ======================================================
    DELETE - Eliminar gasto conjunto
-===================================================== */
+====================================================== */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Params }
+  context: RouteContext
 ) {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
 
-    // TODO: Eliminar gasto en base de datos
+    // 🔹 TODO: Delete DB
     return NextResponse.json({
+      success: true,
       id,
       message: 'Joint expense deleted successfully'
     });
@@ -80,7 +85,7 @@ export async function DELETE(
     console.error('DELETE joint expense error:', error);
 
     return NextResponse.json(
-      { error: 'Failed to delete joint expense' },
+      { success: false, error: 'Failed to delete joint expense' },
       { status: 400 }
     );
   }
