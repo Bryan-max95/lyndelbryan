@@ -1,38 +1,92 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * ✅ Next.js 15 / 16 Route Context
+ * params ahora es Promise
+ */
+type RouteContext = {
+  params: Promise<{ id: string }>;
+};
+
+/* ======================================================
+   GET - Obtener gasto conjunto
+====================================================== */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
-    // TODO: Get joint expense by ID from database
-    return NextResponse.json({ id: params.id });
+    const { id } = await context.params;
+
+    // 🔹 TODO: Obtener desde DB
+    return NextResponse.json({
+      success: true,
+      id,
+      message: 'Joint expense fetched successfully'
+    });
+
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch joint expense' }, { status: 400 });
+    console.error('GET joint expense error:', error);
+
+    return NextResponse.json(
+      { success: false, error: 'Failed to fetch joint expense' },
+      { status: 400 }
+    );
   }
 }
 
+/* ======================================================
+   PUT - Actualizar gasto conjunto
+====================================================== */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
+    const { id } = await context.params;
     const data = await request.json();
-    // TODO: Update joint expense in database
-    return NextResponse.json({ id: params.id, ...data });
+
+    // 🔹 TODO: Update DB
+    return NextResponse.json({
+      success: true,
+      id,
+      ...data,
+      message: 'Joint expense updated successfully'
+    });
+
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to update joint expense' }, { status: 400 });
+    console.error('PUT joint expense error:', error);
+
+    return NextResponse.json(
+      { success: false, error: 'Failed to update joint expense' },
+      { status: 400 }
+    );
   }
 }
 
+/* ======================================================
+   DELETE - Eliminar gasto conjunto
+====================================================== */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
-    // TODO: Delete joint expense from database
-    return NextResponse.json({ message: 'Joint expense deleted' });
+    const { id } = await context.params;
+
+    // 🔹 TODO: Delete DB
+    return NextResponse.json({
+      success: true,
+      id,
+      message: 'Joint expense deleted successfully'
+    });
+
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to delete joint expense' }, { status: 400 });
+    console.error('DELETE joint expense error:', error);
+
+    return NextResponse.json(
+      { success: false, error: 'Failed to delete joint expense' },
+      { status: 400 }
+    );
   }
 }
